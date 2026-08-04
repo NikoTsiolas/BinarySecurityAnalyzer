@@ -16,7 +16,7 @@ def identify_file(path: Path) -> dict:
     
     return {
         
-    #size metadata from the magic bytes
+        #size metadata from OS stat, size of file
         "size" : size,
         
         #Scoring to match against
