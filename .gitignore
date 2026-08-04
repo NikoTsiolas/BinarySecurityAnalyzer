@@ -1,0 +1,19 @@
+# Environments / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+
+# Secrets — VirusTotal API key lives in the environment, never in the repo
+.env
+
+# Analysis samples — NEVER commit binaries, especially malware samples
+samples/
+*.exe
+*.dll
+*.msi
+*.zip
+
+# Generated reports
+reports/
