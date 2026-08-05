@@ -11,6 +11,10 @@ produced it and a plain-English explanation. There is no opaque number.
 
 ## Usage
 
+Requires Python 3.12+, [uv](https://docs.astral.sh/uv/), and libmagic
+(`brew install libmagic` on macOS, `apt install libmagic1` on Debian).
+Then `uv sync` to install dependencies.
+
 ```
 uv run bintriage <file> --html report.html --json report.json
 ```
