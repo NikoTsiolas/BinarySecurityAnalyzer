@@ -17,7 +17,7 @@ KNOWN_SECTIONS = {
 # capability categories. weights reflect how often the capability shows up in
 # legitimate software: injection and credential theft are rare and damning,
 # persistence and network are everywhere and only matter as corroboration.
-# will have claude fill this in, redundant after the first two.
+
 IMPORT_CATEGORIES = {
     "process_injection": {
         "weight": 25,
