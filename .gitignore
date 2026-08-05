@@ -17,3 +17,6 @@ samples/
 
 # Generated reports
 reports/
+*.html
+*.json
+!package.json

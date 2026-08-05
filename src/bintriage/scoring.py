@@ -228,7 +228,6 @@ def check_iocs(facts: dict) -> list[Indicator]:
 
 def check_reputation(facts: dict) -> list[Indicator]:
     """What the AV industry already knows about this hash.
-
     The one place a single indicator can BLOCK on its own - if dozens of
     engines agree, the question is already settled and our heuristics are
     not adding anything.

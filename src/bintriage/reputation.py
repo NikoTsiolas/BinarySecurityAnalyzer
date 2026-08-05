@@ -13,7 +13,6 @@ TIMEOUT = 15
 
 def check_hash(sha256: str) -> dict | None:
     """Ask VirusTotal what it knows about this hash.
-
     Returns None when the check could not run at all (no API key), so the
     caller can tell "nobody asked" apart from "asked and found nothing".
     """
