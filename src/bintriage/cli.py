@@ -14,6 +14,7 @@ from bintriage.entropy import shannon_entropy
 from bintriage.fileinfo import identify_file
 from bintriage.hashing import hash_file
 from bintriage.pe_analysis import analyze_pe
+from bintriage.scoring import score
 from bintriage.strings_analysis import extract_strings, find_iocs
 
 
@@ -89,7 +90,17 @@ def print_report(facts: dict) -> None:
         for where, msg in facts["errors"].items():
             print(f"  {where}: {msg}")
 
-    print("\nverdict     : (scoring module not built yet)\n")
+    result = facts["scoring"]
+    print(f"\n{'=' * 60}")
+    print(f"VERDICT: {result['verdict'].value}   (risk score {result['score']})")
+    print(f"{'=' * 60}")
+    for i in result["indicators"]:
+        print(f"\n  [{i.weight:>3}] {i.name}  ({i.category})")
+        print(f"        evidence : {i.evidence}")
+        print(f"        why      : {i.explanation}")
+    if not result["indicators"]:
+        print("\n  no indicators fired")
+    print()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -112,6 +123,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     facts = collect(args.file)
+    facts["scoring"] = score(facts)
     print_report(facts)
 
     if args.json:
