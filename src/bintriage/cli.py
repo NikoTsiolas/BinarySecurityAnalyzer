@@ -14,6 +14,8 @@ from bintriage.entropy import shannon_entropy
 from bintriage.fileinfo import identify_file
 from bintriage.hashing import hash_file
 from bintriage.pe_analysis import analyze_pe
+from bintriage.report import to_html, to_json
+from bintriage.reputation import check_hash
 from bintriage.scoring import score
 from bintriage.strings_analysis import extract_strings, find_iocs
 
@@ -123,14 +125,24 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     facts = collect(args.file)
+
+    if args.vt:
+        sha256 = (facts.get("hashes") or {}).get("sha256")
+        if sha256:
+            facts["virustotal"] = check_hash(sha256)
+            if facts["virustotal"] is None:
+                print("note: VT_API_KEY not set, skipping VirusTotal lookup", file=sys.stderr)
+
     facts["scoring"] = score(facts)
     print_report(facts)
 
     if args.json:
-        import json
-
-        args.json.write_text(json.dumps(facts, indent=2))
+        to_json(facts, args.json)
         print(f"wrote {args.json}")
+
+    if args.html:
+        to_html(facts, args.html)
+        print(f"wrote {args.html}")
 
     return 0
 

@@ -67,13 +67,17 @@ IMPORT_CATEGORIES = {
 # finding, not several, so they collapse into a single capped indicator.
 PACKER_PROFILE_WEIGHT = 35
 
+# below this many detections it is usually a heuristic false positive.
+# at or above it, the industry has already decided and we defer.
+VT_CONSENSUS = 5
+
 # verdict bands. wide REVIEW because ambiguity is the normal case.
 REVIEW_AT = 20
 BLOCK_AT = 50
 
 
 def check_identity(facts: dict) -> list[Indicator]:
-    """Does the file's extension match what its bytes say it is?"""
+    """Does the file's extension match what its bytes say it is essentiall"""
     info = facts.get("fileinfo")
     if not info:
         return []
@@ -222,12 +226,46 @@ def check_iocs(facts: dict) -> list[Indicator]:
     return []
 
 
+def check_reputation(facts: dict) -> list[Indicator]:
+    """What the AV industry already knows about this hash.
+
+    The one place a single indicator can BLOCK on its own - if dozens of
+    engines agree, the question is already settled and our heuristics are
+    not adding anything.
+    """
+    vt = facts.get("virustotal")
+    if not vt or vt.get("status") != "found":
+        return []
+
+    hits = vt["malicious"] + vt["suspicious"]
+
+    if hits >= VT_CONSENSUS:
+        return [Indicator(
+            name="virustotal_consensus",
+            category="reputation",
+            weight=60,
+            evidence=f"{hits} of {vt['engines']} engines flag this file",
+            explanation="A broad consensus across independent antivirus engines. This is the strongest signal available and does not need corroboration.",
+        )]
+
+    if hits >= 1:
+        return [Indicator(
+            name="virustotal_minority",
+            category="reputation",
+            weight=15,
+            evidence=f"only {hits} of {vt['engines']} engines flag this file",
+            explanation="A small number of detections is often a heuristic false positive - engines flag packers and obscure software routinely. Worth a look, not a conviction.",
+        )]
+    return []
+
+
 CHECKS = (
     check_identity,
     check_section_flags,
     check_imports,
     check_timestamp,
     check_iocs,
+    check_reputation,
 )
 
 
