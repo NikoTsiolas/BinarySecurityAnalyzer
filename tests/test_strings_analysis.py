@@ -1,4 +1,4 @@
-from bintriage.strings_analysis import extract_strings
+from bintriage.strings_analysis import extract_strings, find_iocs
 
 
 def test_finds_string_between_junk():
@@ -26,3 +26,20 @@ def test_runs_do_not_smear_together():
 
 def test_no_printables_at_all():
     assert extract_strings(b"\x00\x01\x02\xff" * 10) == []
+
+
+def test_iocs_are_categorized():
+    found = find_iocs(["beacon to 10.0.0.5", "fetch https://evil.top/x", "drop C:\\Temp\\a.exe"])
+    assert found["ipv4"] == ["10.0.0.5"]
+    assert found["url"] == ["https://evil.top/x"]
+    assert found["windows_path"] == ["C:\\Temp\\a.exe"]
+
+
+def test_duplicate_iocs_reported_once():
+    found = find_iocs(["hit 10.0.0.5", "again 10.0.0.5", "and again 10.0.0.5"])
+    assert found["ipv4"] == ["10.0.0.5"]
+
+
+def test_clean_strings_give_empty_lists():
+    found = find_iocs(["hello world", "no leads here"])
+    assert all(v == [] for v in found.values())
