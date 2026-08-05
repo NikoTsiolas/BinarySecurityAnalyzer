@@ -4,7 +4,6 @@ Each collector runs independently - one failing is recorded as a fact, not a
 crash, because malformed files are expected input for a triage tool.
 """
 
-#Claude helped with this, expedited the project for this part.
 
 import argparse
 import sys

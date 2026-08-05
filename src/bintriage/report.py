@@ -3,7 +3,7 @@
 The HTML has no external CSS, fonts or scripts, so it renders identically on
 an air-gapped machine and screenshots cleanly into a ticket.
 """
-#claude helped build the website UI
+
 
 import json
 from dataclasses import asdict
