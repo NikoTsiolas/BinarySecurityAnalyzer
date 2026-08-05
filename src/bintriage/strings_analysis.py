@@ -49,7 +49,7 @@ def extract_strings(data: bytes, min_len: int = 4) -> list[str]:
 
 
 def find_iocs(strings: list[str]) -> dict[str, list[str]]:
-    """Match extracted strings against IOC patterns: ips, urls, domains, paths."""
+    """Match extracted strings against IOC patterns: ips, urls, domains, paths. Takes the output of extract strings."""
     results = {}
     
     for category, pattern in IOC_PATTERNS.items():
