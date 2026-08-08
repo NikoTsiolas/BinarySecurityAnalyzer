@@ -92,3 +92,9 @@ uv run pytest
 
 Samples live in `samples/` and are gitignored. Tests that need a real PE skip
 cleanly when it is absent.
+
+## AI assistance
+
+Claude was used for the HTML report template and its CSS (`report.py`) and for
+the VirusTotal client tests (`tests/test_reputation.py`). The analysis logic,
+the scoring model, and every threshold and weight decision are mine.
