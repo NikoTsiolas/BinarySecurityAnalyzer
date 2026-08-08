@@ -12,8 +12,13 @@ class Verdict(str, Enum):
 
 @dataclass(frozen=True)
 class Indicator:
-    name: str         # short id like "packed_section"
-    category: str     # which check it came from: entropy, imports, strings...
-    weight: int       # how many points it adds to the risk score
-    evidence: str     # what was actually observed, e.g. ".text entropy = 7.64"
-    explanation: str  # why an analyst cares, in plain English
+    # short id like "packed_section"
+    name: str    
+    # which check it came from: entropy, imports, strings...     
+    category: str     
+    # how many points it adds to the risk score
+    weight: int    
+    # what was actually observed, e.g. ".text entropy = 7.64"   
+    evidence: str  
+    # why an analyst cares, in plain English   
+    explanation: str  
