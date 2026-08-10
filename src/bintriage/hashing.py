@@ -17,7 +17,7 @@ def hash_file(path: Path) -> dict[str, str]:
     md5 = hashlib.md5()
 
     with path.open("rb") as f:
-        #f.read returns up to 1MiB, a full chunk mid file, partial chunk at the end, and empty bytes once its exhausted
+        #f.read returns up to 1MB, a full chunk mid file, partial chunk at the end, and empty bytes once its exhausted
         while chunk := f.read(CHUNK_SIZE):
             sha256.update(chunk)
             md5.update(chunk)

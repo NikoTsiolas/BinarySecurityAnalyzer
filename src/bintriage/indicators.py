@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-
+#inherits str because json dump crashed if there was necessary str and didnt have one there. hence why it takes str here.
 class Verdict(str, Enum):
     ALLOW = "ALLOW"
     REVIEW = "REVIEW"
