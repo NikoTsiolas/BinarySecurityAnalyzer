@@ -5,6 +5,8 @@ import re
 # judgment call: domain matching is restricted to common + abuse-heavy TLDs,
 # otherwise every "kernel32.dll" and "file.txt" in the binary matches as a domain
 IOC_PATTERNS = {
+    
+    #compile turns the input value into an object for regex engine to parse
     "ipv4": re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b"),
     
     "url": re.compile(r"https?://[^\s\"'<>]+"),
@@ -40,7 +42,7 @@ def extract_strings(data: bytes, min_len: int = 4) -> list[str]:
                 found.append(bytes(run).decode("ascii"))
             run = []                    
             
-
+        #if bytes run out 
     if len(run) >= min_len:
         
         found.append(bytes(run).decode("ascii"))
@@ -54,6 +56,8 @@ def find_iocs(strings: list[str]) -> dict[str, list[str]]:
     
     for category, pattern in IOC_PATTERNS.items():
         
+        #no dupes, C2 address shows up a bunch of times, just need 2 know its there
+        #needs to be in the for loop, issue with each category inheriting the priors pool. every cat has every filing
         matches = set()                      
         
         for s in strings:
@@ -62,4 +66,4 @@ def find_iocs(strings: list[str]) -> dict[str, list[str]]:
             
         results[category] = sorted(matches)  
         
-    return results
+    return 

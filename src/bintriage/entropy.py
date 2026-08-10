@@ -6,8 +6,6 @@
 import math
 from collections import Counter
 
-
-
 def shannon_entropy(data: bytes) -> float:
     """Bits per byte, 0.0 to 8.0. Empty input counts as 0.0."""
     if not data:
