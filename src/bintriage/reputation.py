@@ -39,6 +39,7 @@ def check_hash(sha256: str) -> dict | None:
     if r.status_code != 200:
         return {"status": "error", "detail": f"HTTP {r.status_code}"}
 
+    #stores values from VT response
     stats = r.json()["data"]["attributes"]["last_analysis_stats"]
     engines = sum(stats.values())
 

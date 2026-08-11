@@ -2,10 +2,7 @@
 
 from datetime import datetime, timezone
 from pathlib import Path
-
-
 import pefile
-
 from bintriage.entropy import shannon_entropy 
 
 def analyze_pe(path: Path) -> dict | None:
@@ -14,7 +11,7 @@ def analyze_pe(path: Path) -> dict | None:
     Raises pefile.PEFormatError on a malformed PE - caller records that as a fact.
     """
     
-    #cheap gate: no MZ sig, not a PE, not our problem
+    #cheap gate: no MZ sig, not a PE
     
     with path.open("rb") as f:
         
@@ -22,18 +19,23 @@ def analyze_pe(path: Path) -> dict | None:
         
             return None
     
+    #make str because pefile predates pathlib
     pe = pefile.PE(str(path))
     
     sections = []
     
     for sec in pe.sections:
         sections.append({
+            #replace replaces anything unknown ascii with ? symbol, possibly crash analyzer
             "name": sec.Name.rstrip(b"\x00").decode("ascii", errors="replace"),
             
+            #bytes on disk
             "raw_size": sec.SizeOfRawData,
             
-            "virtual_size": sec.Misc_VirtualSize,
             #the sections raw bytes off disk
+            "virtual_size": sec.Misc_VirtualSize,
+            
+            #calls the entropy function on this iterated section
             "entropy": round(shannon_entropy(sec.get_data()), 2),  
             
             #executable Bit    

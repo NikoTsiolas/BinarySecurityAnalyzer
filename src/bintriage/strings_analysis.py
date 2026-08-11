@@ -64,6 +64,6 @@ def find_iocs(strings: list[str]) -> dict[str, list[str]]:
             
             matches.update(pattern.findall(s))
             
-        results[category] = sorted(matches)  
-        
-    return 
+        results[category] = sorted(matches)
+
+    return results

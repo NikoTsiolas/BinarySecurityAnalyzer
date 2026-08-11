@@ -63,8 +63,7 @@ IMPORT_CATEGORIES = {
     },
 }
 
-# packing shows up as several section-table symptoms at once. they are one
-# finding, not several, so they collapse into a single capped indicator.
+# packing shows up as several section table symptoms at once. they are one finding, not several, so they collapse into a single capped indicator.
 PACKER_PROFILE_WEIGHT = 35
 
 # below this many detections it is usually a heuristic false positive.
